@@ -1,0 +1,8 @@
+name: hellojava
+home: https://github.com/jcorioland/kubernetes-jenkins
+version: 0.1.0
+description: Java SpringBoot Hello World API
+sources:
+  - https://github.com/jcorioland/kubernetes-jenkins
+maintainers:
+  - name: Julien Corioland
