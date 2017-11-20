@@ -22,6 +22,8 @@ volumes:[
     def chart_dir = "${pwd}/charts/hellojava"
     def tags = [:]
     tags << ['master': 'latest']
+    tags << ['commit': 'latest']
+    tags << ['build': 'latest']
     def docker_registry_url = "jcorioland.azurecr.io"
     def docker_email = "jucoriol@microsoft.com"
     def docker_repo = "hellojava"
@@ -56,7 +58,7 @@ volumes:[
           dry_run       : true,
           name          : "hello-java",
           namespace     : "hello-java",
-          version_tag   : tags.get(0),
+          version_tag   : "latest",
           chart_dir     : chart_dir,
           replicas      : 2,
           cpu           : "10m",
@@ -99,7 +101,7 @@ volumes:[
             dry_run       : false,
             name          : "hello-java",
             namespace     : "hello-java",
-            version_tag   : tags.get(0),
+            version_tag   : "latest",
             chart_dir     : chart_dir,
             replicas      : 2,
             cpu           : "10m",
