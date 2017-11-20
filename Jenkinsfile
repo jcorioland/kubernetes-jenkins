@@ -20,7 +20,7 @@ volumes:[
 
     def pwd = pwd()
     def chart_dir = "${pwd}/charts/hellojava"
-    def version_tag = env.GIT_COMMIT_ID.substring(0, 7)
+    def version_tag = env.BUILD_TAG
     def docker_registry_url = "jcorioland.azurecr.io"
     def docker_email = "jucoriol@microsoft.com"
     def docker_repo = "hellojava"
