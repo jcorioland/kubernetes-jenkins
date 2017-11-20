@@ -98,7 +98,7 @@ volumes:[
 
           // Deploy using Helm chart
            pipeline.helmDeploy(
-            dry_run       : true,
+            dry_run       : false,
             name          : "hello-java",
             namespace     : "hello-java",
             version_tag   : version_tag,
