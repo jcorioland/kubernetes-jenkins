@@ -14,6 +14,6 @@ public class HelloController {
         } catch (Exception e) {
             // nothing.
         }
-        return "Hello World !! I am running on " + hostname;
+        return "Hello Kubernetes !! I am running on " + hostname;
     }
 }
