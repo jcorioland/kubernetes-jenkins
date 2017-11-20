@@ -79,7 +79,7 @@ volumes:[
 
         // build and publish container
         pipeline.containerBuildPub(
-            dockerfile: "./Dockerfile",
+            dockerfile: "./",
             host      : docker_registry_url,
             acct      : docker_acct,
             repo      : docker_repo,
