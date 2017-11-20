@@ -77,13 +77,16 @@ volumes:[
           sh "docker login -e ${docker_email} -u ${env.USERNAME} -p ${env.PASSWORD} ${docker_registry_url}"
         }
 
+        def tags = [:]
+        tags << ['build': version_tag]
+
         // build and publish container
         pipeline.containerBuildPub(
             dockerfile: "./",
             host      : docker_registry_url,
             acct      : docker_acct,
             repo      : docker_repo,
-            tags      : version_tag,
+            tags      : tags,
             auth_id   : jenkins_registry_cred_id
         )
       }
