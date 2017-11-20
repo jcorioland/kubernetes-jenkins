@@ -1,0 +1,19 @@
+{
+    "app": {
+      "name": "hellojava",
+      "replicas": "2",
+      "cpu": "10m",
+      "memory": "128Mi",
+      "test": false,
+      "hostname": "hellojava.k8s-engine.jcorioland.io"
+    },
+    "container_repo": {
+      "host": "jcorioland.azurecr.io",
+      "master_acct": "kubernetes",
+      "alt_acct": "kubernetes",
+      "jenkins_creds_id": "acr_creds",
+      "repo": "hellojava",
+      "dockeremail": ".",
+      "dockerfile": "./"
+    }
+  }
