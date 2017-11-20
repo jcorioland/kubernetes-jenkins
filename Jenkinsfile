@@ -20,7 +20,7 @@ volumes:[
 
     def pwd = pwd()
     def chart_dir = "${pwd}/charts/hellojava"
-    def tags = ['latest']
+    def tags = [env.BUILD_TAG, 'latest']
     def docker_registry_url = "jcorioland.azurecr.io"
     def docker_email = "jucoriol@microsoft.com"
     def docker_repo = "hellojava"
