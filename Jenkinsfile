@@ -20,7 +20,8 @@ volumes:[
 
     def pwd = pwd()
     def chart_dir = "${pwd}/charts/hellojava"
-    def version_tag = env.BUILD_TAG
+    def tags = [:]
+    tags << ['master': 'latest']
     def docker_registry_url = "jcorioland.azurecr.io"
     def docker_email = "jucoriol@microsoft.com"
     def docker_repo = "hellojava"
@@ -55,7 +56,7 @@ volumes:[
           dry_run       : true,
           name          : "hello-java",
           namespace     : "hello-java",
-          version_tag   : version_tag,
+          version_tag   : tags.get(0),
           chart_dir     : chart_dir,
           replicas      : 2,
           cpu           : "10m",
@@ -76,9 +77,6 @@ volumes:[
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: jenkins_registry_cred_id, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
           sh "docker login -e ${docker_email} -u ${env.USERNAME} -p ${env.PASSWORD} ${docker_registry_url}"
         }
-
-        def tags = [:]
-        tags << ['build': version_tag]
 
         // build and publish container
         pipeline.containerBuildPub(
@@ -101,7 +99,7 @@ volumes:[
             dry_run       : false,
             name          : "hello-java",
             namespace     : "hello-java",
-            version_tag   : version_tag,
+            version_tag   : tags.get(0),
             chart_dir     : chart_dir,
             replicas      : 2,
             cpu           : "10m",
