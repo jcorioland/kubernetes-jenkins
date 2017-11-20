@@ -19,25 +19,19 @@ volumes:[
   node ('jenkins-pipeline') {
 
     def pwd = pwd()
-    def chart_dir = "${pwd}/charts/api-demo"
+    def chart_dir = "${pwd}/charts/hellojava"
+    def version_tag = env.GIT_COMMIT_ID.substring(0, 7)
+    def docker_registry_url = "jcorioland.azurecr.io"
+    def docker_email = "jucoriol@microsoft.com"
+    def docker_repo = "hellojava"
+    def docker_acct = "kubernetes"
+    def jenkins_registry_cred_id = "acr_creds"
 
     // checkout sources
     checkout scm
 
-    // read in required jenkins workflow config values
-    def inputFile = readFile('Jenkinsfile.json')
-    def config = new groovy.json.JsonSlurper().parseText(inputFile)
-
     // set additional git envvars for image tagging
     pipeline.gitEnvVars()
-
-    def acct = pipeline.getContainerRepoAcct(config)
-
-    // tag image with version, and branch-commit_id
-    def image_tags_map = pipeline.getContainerTags(config)
-
-    // compile tag list
-    def image_tags_list = pipeline.getMapValues(image_tags_map)
 
     // Execute Maven build and tests
     stage ('Maven Build & Tests') {
@@ -59,14 +53,14 @@ volumes:[
         // run dry-run helm chart installation
         pipeline.helmDeploy(
           dry_run       : true,
-          name          : config.app.name,
-          namespace     : config.app.name,
-          version_tag   : image_tags_list.get(0),
+          name          : "hello-java",
+          namespace     : "hello-java",
+          version_tag   : version_tag,
           chart_dir     : chart_dir,
-          replicas      : config.app.replicas,
-          cpu           : config.app.cpu,
-          memory        : config.app.memory,
-          hostname      : config.app.hostname
+          replicas      : 2,
+          cpu           : "10m",
+          memory        : "128Mi",
+          hostname      : "hellojava.k8s-engine.jcorioland.io"
         )
 
       }
@@ -78,19 +72,19 @@ volumes:[
       container('docker') {
 
         // perform docker login
-        withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: config.container_repo.jenkins_creds_id,
+        withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: jenkins_registry_cred_id,
                         usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-          sh "docker login -e ${config.container_repo.dockeremail} -u ${env.USERNAME} -p ${env.PASSWORD} ${config.container_repo.host}"
+          sh "docker login -e ${docker_email} -u ${env.USERNAME} -p ${env.PASSWORD} ${docker_registry_url}"
         }
 
         // build and publish container
         pipeline.containerBuildPub(
-            dockerfile: config.container_repo.dockerfile,
-            host      : config.container_repo.host,
-            acct      : acct,
-            repo      : config.container_repo.repo,
-            tags      : image_tags_list,
-            auth_id   : config.container_repo.jenkins_creds_id
+            dockerfile: "./Dockerfile",
+            host      : docker_registry_url,
+            acct      : docker_acct,
+            repo      : docker_repo,
+            tags      : version_tag,
+            auth_id   : jenkins_registry_cred_id
         )
       }
 
@@ -101,24 +95,17 @@ volumes:[
         container('helm') {
 
           // Deploy using Helm chart
-          pipeline.helmDeploy(
-            dry_run       : false,
-            name          : config.app.name,
-            namespace     : config.app.name,
-            version_tag   : image_tags_list.get(0),
+           pipeline.helmDeploy(
+            dry_run       : true,
+            name          : "hello-java",
+            namespace     : "hello-java",
+            version_tag   : version_tag,
             chart_dir     : chart_dir,
-            replicas      : config.app.replicas,
-            cpu           : config.app.cpu,
-            memory        : config.app.memory,
-            hostname      : config.app.hostname
+            replicas      : 2,
+            cpu           : "10m",
+            memory        : "128Mi",
+            hostname      : "hellojava.k8s-engine.jcorioland.io"
           )
-          
-          //  Run helm tests
-          if (config.app.test) {
-            pipeline.helmTest(
-              name          : config.app.name
-            )
-          }
         }
       }
   }
