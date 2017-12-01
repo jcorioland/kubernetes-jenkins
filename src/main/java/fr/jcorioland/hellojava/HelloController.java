@@ -16,4 +16,9 @@ public class HelloController {
         }
         return "Hello Kubernetes !! I am running on " + hostname;
     }
+
+    @RequestMapping("/echo")
+    public String test() {
+        return "echo";
+    }
 }
