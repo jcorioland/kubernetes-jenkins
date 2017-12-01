@@ -15,7 +15,7 @@ memory: "128Mi"
 # Ingress settings
 ingress:
   enabled: true
-  hostname: hellojava.k8s-engine.jcorioland.io
+  hostname: hellojava.aks.jcorioland.io
   annotations:
      kubernetes.io/ingress.class: traefik
      kubernetes.io/tls-acme: "true"

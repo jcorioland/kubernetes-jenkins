@@ -22,6 +22,7 @@ volumes:[
     def chart_dir = "${pwd}/charts/hellojava"
     def tags = [env.BUILD_TAG, 'latest']
     def docker_registry_url = "jcorioland.azurecr.io"
+    def app_hostname = "hellojava.aks.jcorioland.io";
     def docker_email = "jucoriol@microsoft.com"
     def docker_repo = "hellojava"
     def docker_acct = "kubernetes"
@@ -60,7 +61,7 @@ volumes:[
           replicas      : 2,
           cpu           : "10m",
           memory        : "128Mi",
-          hostname      : "hellojava.k8s-engine.jcorioland.io"
+          hostname      : app_hostname
         )
 
       }
@@ -103,7 +104,7 @@ volumes:[
             replicas      : 2,
             cpu           : "10m",
             memory        : "128Mi",
-            hostname      : "hellojava.k8s-engine.jcorioland.io"
+            hostname      : app_hostname
           )
         }
       }
