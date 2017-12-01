@@ -14,7 +14,7 @@ public class HelloController {
         } catch (Exception e) {
             // nothing.
         }
-        return "Hello Kubernetes !! I am running on " + hostname;
+        return "Hello POSS 2017 !! I am running on " + hostname;
     }
 
     @RequestMapping("/echo")
