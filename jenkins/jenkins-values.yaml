@@ -1,6 +1,6 @@
 Master:
   Memory: "512Mi"
-  HostName: jenkins2.k8s-engine.jcorioland.io
+  HostName: jenkins.aks.jcorioland.io
   ServiceType: ClusterIP 
   InstallPlugins:
       - kubernetes:0.12
@@ -26,9 +26,9 @@ Ingress:
     kubernetes.io/tls-acme: "true"
 
   TLS:
-    - secretName: jenkins2.k8s-engine.jcorioland.io
+    - secretName: jenkins.aks.jcorioland.io
       hosts:
-        - jenkins2.k8s-engine.jcorioland.io
+        - jenkins.aks.jcorioland.io
 
 Agent:
   Enabled: false
